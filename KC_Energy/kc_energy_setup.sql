@@ -1,0 +1,42 @@
+CREATE SCHEMA IF NOT EXISTS kc_energy;
+USE kc_energy;
+
+CREATE TABLE IF NOT EXISTS CUSTOMER
+(Name varchar(100) NOT NULL,
+AccountNumber int UNSIGNED NOT NULL AUTO_INCREMENT, 
+PhoneNumber varchar(12) NOT NULL,
+EmailAddress varchar(100) NOT NULL,
+StreetAddress varchar(100) NOT NULL,
+City varchar(50) NOT NULL,
+State char(2),
+Country varchar(50) NOT NULL,
+ZipCode char(5),
+OutstandingBalance Decimal(12,2) NOT NULL DEFAULT 0,
+PRIMARY KEY(AccountNumber));
+
+ALTER TABLE CUSTOMER AUTO_INCREMENT = 1001;
+
+CREATE TABLE IF NOT EXISTS METER
+(MeterID int NOT NULL AUTO_INCREMENT,
+custID int UNSIGNED NOT NULL,
+FOREIGN KEY (custID) REFERENCES CUSTOMER(AccountNumber) ON DELETE CASCADE,
+EnergyType varchar(100) NOT NULL,
+EnergyUsage Decimal(7,2) NOT NULL DEFAULT 0,
+Tariff Decimal(5,2) NOT NULL,
+Balance Decimal(10,2) NOT NULL DEFAULT 0,
+PRIMARY KEY(MeterID));
+
+ALTER TABLE METER AUTO_INCREMENT = 1;
+
+CREATE TABLE IF NOT EXISTS CHARGE
+(ChargeID Int NOT NULL AUTO_INCREMENT,
+metID Int NOT NULL,
+FOREIGN KEY (metID) REFERENCES METER(MeterID) ON DELETE CASCADE,
+ChargeAmount Decimal(5,2) NOT NULL,
+AppliedTariff Decimal(5,2) NOT NULL,
+Cost Decimal(8,2) NOT NULL DEFAULT 0,
+ChargeDate Datetime NOT NULL,
+Paid Boolean NOT NULL DEFAULT false,
+PRIMARY KEY(ChargeID));
+
+ALTER TABLE CHARGE AUTO_INCREMENT = 1;
